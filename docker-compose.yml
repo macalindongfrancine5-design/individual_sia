@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: inventory_laravel_app
+    working_dir: /var/www
+    volumes:
+      - ./src:/var/www
+    ports:
+      - 8080:8000
+    networks:
+      - laravel_network
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: inventory_db
+      MYSQL_USER: inventory_user
+      MYSQL_PASSWORD: passworddb
+    ports:
+      - 3307:3306
+    networks:
+      - laravel_network
+    volumes:
+      - db_data:/var/lib/mysql
+
+networks:
+  laravel_network:
+
+volumes:
+  db_data:
